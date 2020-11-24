@@ -75,7 +75,7 @@ function generateTransformation () {
       transformations[i] = `l_text:${fonts[i]}_${fontSizes[i]}:${encodeURIComponent(encodeURIComponent(messages[i]))},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`
     }
   }
-  const url = `https://res.cloudinary.com/mermaid/image/upload/${transformations.join('/').replace('//', '/')}/f_auto,q_auto/${window.publicId}`
+  const url = `https://res.cloudinary.com/${window.cloudName}/image/upload/${transformations.join('/').replace('//', '/')}/f_auto,q_auto/${window.publicId}`
   const img = document.getElementById('img')
   img.src = url
   const link = document.getElementById('link')
@@ -84,7 +84,7 @@ function generateTransformation () {
 
 function clearTransformation () {
   const img = document.getElementById('img')
-  img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + window.publicId
+  img.src = `https://res.cloudinary.com/${window.cloudName}/image/upload/f_auto,q_auto/${window.publicId}`
 }
 
 // helper functions to get each of the values
@@ -121,7 +121,7 @@ function fetchAndAddFonts () {
   const fonts = []
 
   // first fetch the fonts
-  fetch('https://res.cloudinary.com/mermaid/raw/list/s--U6JRujq4--/font.json')
+  fetch(window.fontListURL)
     .then(resp => resp.json())
     .then(resp => {
       for (let i = 0; i < resp.resources.length; i++) {
