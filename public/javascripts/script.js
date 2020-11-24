@@ -135,7 +135,7 @@ function generateTransformation(){
   //generate 1st transformation string
   for (let i=0; i<messages.length; i++){
     if(messages[i] && messages[i]!=''){
-      transformations[i] = `l_text:CustomFont:${fonts[i]}.ttf_${fontSizes[i]}:${encodeURIComponent(messages[i])},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`      
+      transformations[i] = `l_text:CustomFont:${fonts[i]}.ttf_${fontSizes[i]}:${encodeURIComponent(encodeURIComponent(messages[i]))},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`      
     }
   }
   const url = `https://res.cloudinary.com/mermaid/image/upload/${transformations.join('/').replace('//','/')}/f_auto,q_auto/${window.publicId}`
