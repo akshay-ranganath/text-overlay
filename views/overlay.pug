@@ -50,29 +50,17 @@ block content
         div(class="three columns")
             label Font Face &nbsp;
                 select(name="font" class="fontFace")
-                    option(value="f3") Choose one..
-                    option(value="f1") Font1
-                    option(value="f2") Font2
-                    option(value="f3") Font3
-                    option(value="f4") Font4
+                    option(value="f3") Choose one..                    
         div(class="one column")
         div(class="three columns")
             label Font Face &nbsp;
                 select(name="font" class="fontFace")
-                    option(value="f3") Choose one..
-                    option(value="f1") Font1
-                    option(value="f2") Font2
-                    option(value="f3") Font3
-                    option(value="f4") Font4
+                    option(value="f3") Choose one..                    
         div(class="one column")
         div(class="three columns")
             label Font Face &nbsp;
                 select(name="font" class="fontFace")
-                    option(value="f3") Choose one..
-                    option(value="f1") Font1
-                    option(value="f2") Font2
-                    option(value="f3") Font3
-                    option(value="f4") Font4
+                    option(value="f3") Choose one..                    
         div(class="one column")
     //- Font size selector
     div(class="row")
@@ -206,6 +194,10 @@ block content
             generateTransformation,
             false
         )
+
+        window.addEventListener('load', function(){
+            fetchAndAddFonts()
+        })
 
         var publicId = 'aydqtzl0scrq0ulz5038'        
         let ml = null

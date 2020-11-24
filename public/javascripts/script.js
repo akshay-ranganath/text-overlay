@@ -1,57 +1,6 @@
-var insertHandler = function (e) {
-  const img = document.getElementById('img')
-  window.publicId = e.assets[0].public_id
-  img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + e.assets[0].public_id
-}
+// adding for overlay route
 
-function updateText (updateImage) {
-  let text = document.getElementById('message').value || 'test'
-  const img = document.getElementById('img')
-
-  const option = document.getElementById('selFont')
-  const fontSelected = option[option.selectedIndex].value || 'f3'
-
-  const positionSelected = ',g_north_west'
-
-  const posx = document.getElementById('xPos').value || '0'
-  const posy = document.getElementById('yPos').value || '0'
-
-  const fontSize = document.getElementById('selSize').value || '50'
-
-  const color = document.getElementById('fontColor').value || '000000'
-  if (updateImage) {
-    text = encodeURIComponent(text)
-    img.src = 'https://res.cloudinary.com/mermaid/image/upload/l_text:CustomFont:' + fontSelected + '.ttf_' + fontSize + ':' + text + positionSelected + ',x_' + posx + ',y_' + posy + ',co_rgb:' + color + '/f_auto,q_auto/' + window.publicId
-    // show the link
-    const link = document.getElementById('link')
-    link.innerHTML = img.src
-  } else {
-    // simulate the text
-    const c = document.getElementById('canvas')
-    const ctx = c.getContext('2d')
-    ctx.font = fontSize + 'px Arial'
-    ctx.fillText(text, posx, posy)
-  }
-}
-
-var setCurrentValue = function () {
-  const name = this.getAttribute('name')
-  const value = this.value
-  const span = document.getElementsByName(name + '_value')
-  if (span && span.length > 0) {
-    span[0].textContent = value
-    span[0].style = 'color:red;'
-  }
-}
-
-var locateMouse = function (e) {
-  const xpos = document.getElementById('xPos')
-  const ypos = document.getElementById('yPos')
-  xpos.value = e.offsetX
-  ypos.value = e.offsetY
-}
-
-var setCanvasImage = function (e) {
+function setCanvasImage (e) {
   const c = document.getElementById('canvas')
   const ctx = c.getContext('2d')
   const img = document.getElementById('img')
@@ -61,16 +10,6 @@ var setCanvasImage = function (e) {
   ctx.drawImage(img, 5, 5)
 }
 
-var resetCanvasImage = function () {
-  const img = document.getElementById('img')
-  img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + window.publicId
-}
-
-function fetchFontDetails () {
-
-}
-
-// adding for overlay route
 function setSliderValue (i = 0) {
   // loop through the sliders and set the value if there is a mismatch in displayed value to slider value
   const sliders = document.getElementsByClassName('fontSize')
@@ -94,91 +33,109 @@ function setMousePosition (e) {
   }
 }
 
-
-function insertHandler(e) {
+function insertHandler (e) {
   const img = document.getElementById('img')
   window.publicId = e.assets[0].public_id
   img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + e.assets[0].public_id
 }
 
-function previewTransformation(){
+function previewTransformation () {
   const messages = getElements('message')
   const fonts = getFonts()
   const fontSizes = getElements('fontSize')
-  const fontColors = getElements('fontColor')  
+  const fontColors = getElements('fontColor')
   const posXs = getElements('positionX')
   const posYs = getElements('positionY')
 
   console.log(`Processing ${messages.length} messages`)
-  for (let i=0; i<messages.length; i++) {
-    //we have 3 messages - so check each and render each one
+  for (let i = 0; i < messages.length; i++) {
+    // we have 3 messages - so check each and render each one
     renderTextOnCanvas(
       messages[i],
       fontSizes[i],
       fontColors[i],
       posXs[i],
       posYs[i]
-    )    
+    )
   }
-
 }
 
-function generateTransformation(){
+function generateTransformation () {
   const messages = getElements('message')
   const fonts = getFonts()
   const fontSizes = getElements('fontSize')
-  const fontColors = getElements('fontColor')  
+  const fontColors = getElements('fontColor')
   const posXs = getElements('positionX')
   const posYs = getElements('positionY')
 
-  let transformations = Array(messages.length)
-  //generate 1st transformation string
-  for (let i=0; i<messages.length; i++){
-    if(messages[i] && messages[i]!=''){
-      transformations[i] = `l_text:CustomFont:${fonts[i]}.ttf_${fontSizes[i]}:${encodeURIComponent(encodeURIComponent(messages[i]))},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`      
+  const transformations = Array(messages.length)
+  // generate 1st transformation string
+  for (let i = 0; i < messages.length; i++) {
+    if (messages[i] && messages[i] != '') {
+      transformations[i] = `l_text:${fonts[i]}_${fontSizes[i]}:${encodeURIComponent(encodeURIComponent(messages[i]))},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`
     }
   }
-  const url = `https://res.cloudinary.com/mermaid/image/upload/${transformations.join('/').replace('//','/')}/f_auto,q_auto/${window.publicId}`
+  const url = `https://res.cloudinary.com/mermaid/image/upload/${transformations.join('/').replace('//', '/')}/f_auto,q_auto/${window.publicId}`
   const img = document.getElementById('img')
   img.src = url
   const link = document.getElementById('link')
   link.innerHTML = img.src
-  
 }
 
-function clearTransformation() {
-  console.log(
-    'Clear a transform'
-  )
-
+function clearTransformation () {
+  const img = document.getElementById('img')
+  img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + window.publicId
 }
 
 // helper functions to get each of the values
 
-function getFonts() {
+function getFonts () {
   const fontSelectors = document.getElementsByClassName('fontFace')
-  let fonts = Array(fontSelectors.length)
+  const fonts = Array(fontSelectors.length)
 
-  for(let i=0; i<fonts.length; i++) {
+  for (let i = 0; i < fonts.length; i++) {
     const element = fontSelectors[i]
     fonts[i] = element[element.selectedIndex].value
   }
   return fonts
 }
 
-function getElements(elementName) {
+function getElements (elementName) {
   const elements = document.getElementsByClassName(elementName)
-  let values = Array(elements.length)  
-  for(let i=0; i<values.length; i++){
+  const values = Array(elements.length)
+  for (let i = 0; i < values.length; i++) {
     values[i] = elements[i].value || ''
   }
   return values
 }
 
-function renderTextOnCanvas(text, fontSize, fontColor="999999", posx, posy){
+function renderTextOnCanvas (text, fontSize, fontColor = '999999', posx, posy) {
   const c = document.getElementById('canvas')
   const ctx = c.getContext('2d')
   ctx.font = fontSize + 'px Arial'
   ctx.fillStyle = '#' + fontColor
   ctx.fillText(text, posx, posy)
+}
+
+function fetchAndAddFonts () {
+  const fonts = []
+
+  // first fetch the fonts
+  fetch('https://res.cloudinary.com/mermaid/raw/list/s--U6JRujq4--/font.json')
+    .then(resp => resp.json())
+    .then(resp => {
+      for (let i = 0; i < resp.resources.length; i++) {
+        fonts.push(resp.resources[i].public_id)
+      }
+
+      // now display them on the 3 selection boxes
+      const selectBoxes = document.getElementsByClassName('fontFace')
+      console.log(selectBoxes.length, fonts.length)
+      for (let i = 0; i < selectBoxes.length; i++) {
+        for (let j = 0; j < fonts.length; j++) {
+          const option = new Option(fonts[j], fonts[j].replace('/', ':'))
+          selectBoxes[i].add(option)
+        }
+      }
+    }).catch(err => console.log(err))
 }
