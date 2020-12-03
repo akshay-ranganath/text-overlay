@@ -35,8 +35,13 @@ function setMousePosition (e) {
 
 function insertHandler (e) {
   const img = document.getElementById('img')
-  window.publicId = e.assets[0].public_id
-  img.src = 'https://res.cloudinary.com/mermaid/image/upload/f_auto,q_auto/' + e.assets[0].public_id
+  let url = e.assets[0].secure_url
+  if (e.assets[0].derived) {
+    url = e.assets[0].derived[0].secure_url
+  }
+  img.src = url
+  window.baseUrl = url.split(/\/v[0-9]+\//)[0]
+  window.publicId = url.split(/\/v[0-9]+\//)[1]
 }
 
 function previewTransformation () {
@@ -47,8 +52,9 @@ function previewTransformation () {
   const posXs = getElements('positionX')
   const posYs = getElements('positionY')
 
-  console.log(`Processing ${messages.length} messages`)
   for (let i = 0; i < messages.length; i++) {
+    // escape newline accurately for preview
+    messages[i].replace('\n', '&#13;&#10;')
     // we have 3 messages - so check each and render each one
     renderTextOnCanvas(
       messages[i],
@@ -75,7 +81,9 @@ function generateTransformation () {
       transformations[i] = `l_text:${fonts[i]}_${fontSizes[i]}:${encodeURIComponent(encodeURIComponent(messages[i]))},x_${posXs[i]},y_${posYs[i]},g_north_west,co_rgb:${fontColors[i]}`
     }
   }
-  const url = `https://res.cloudinary.com/${window.cloudName}/image/upload/${transformations.join('/').replace('//', '/')}/f_auto,q_auto/${window.publicId}`
+
+  const url = `${window.baseUrl}/${transformations.join('/')}/f_auto,q_auto/${window.publicId}`
+  url.replace('//', '/')
   const img = document.getElementById('img')
   img.src = url
   const link = document.getElementById('link')
@@ -84,7 +92,7 @@ function generateTransformation () {
 
 function clearTransformation () {
   const img = document.getElementById('img')
-  img.src = `https://res.cloudinary.com/${window.cloudName}/image/upload/f_auto,q_auto/${window.publicId}`
+  img.src = `${window.baseUrl}/${window.publicId}`
 }
 
 // helper functions to get each of the values
@@ -130,7 +138,6 @@ function fetchAndAddFonts () {
 
       // now display them on the 3 selection boxes
       const selectBoxes = document.getElementsByClassName('fontFace')
-      console.log(selectBoxes.length, fonts.length)
       for (let i = 0; i < selectBoxes.length; i++) {
         for (let j = 0; j < fonts.length; j++) {
           const option = new Option(fonts[j], fonts[j].replace('/', ':'))

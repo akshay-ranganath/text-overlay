@@ -65,19 +65,16 @@ block content
     //- Font size selector
     div(class="row")
         div(class="three columns")
-            label Font Size
-                input(type="range" min="10" max="200" value="60" class="slider fontSize")
-                span(class="showFontSize") 60
+            label Font Size &nbsp;
+                input(type="text" size="6" class="fontSize")                
         div(class="one column")
         div(class="three columns")
-            label Font Size
-                input(type="range" min="10" max="200" value="60" class="slider fontSize")
-                span(class="showFontSize") 60
+            label Font Size &nbsp;
+                input(type="text" size="6" class="fontSize")                
         div(class="one column")
         div(class="three columns")
-            label Font Size
-                input(type="range" min="10" max="200" value="60" class="slider fontSize")
-                span(class="showFontSize") 60
+            label Font Size &nbsp;
+                input(type="text" size="6" class="fontSize")                
         div(class="one column")
     //- Font Color
     div(class="row")
@@ -145,6 +142,7 @@ block content
         // your cloud name
         var cloudName = 'mermaid'
         // a default image
+        var baseUrl = 'https://res.cloudinary.com/mermaid/image/upload'
         var publicId = 'aydqtzl0scrq0ulz5038'
         // an API key
         var apiKey = '515719411948469'
@@ -153,17 +151,7 @@ block content
         // tag name for fonts
         var fontListURL = 'https://res.cloudinary.com/mermaid/raw/list/s--U6JRujq4--/font.json'
         var config = {}
-
-        
-        //Selecting font size
-        const sliders = document.getElementsByClassName('fontSize')
-        for(let i=0; i<sliders.length; i++){
-            sliders[i].addEventListener(
-                'change',
-                function() {setSliderValue(i) },
-                false
-            )
-        }
+                
 
         // add an event listenr for click on canvas. This will be used to detect mouse pointer position to position text overlay
         document.getElementById('canvas').addEventListener('click', function(e) {
@@ -219,7 +207,8 @@ block content
             api_key: apiKey,
             username: userName, 
             button_class: 'myBtn',
-            button_caption: 'Insert Image'          
+            button_caption: 'Insert Image',
+            multiple: false          
             }
         
         window.ml = cloudinary.createMediaLibrary(mloptions, {insertHandler: insertHandler}, "#my_btn")
